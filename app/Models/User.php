@@ -8,11 +8,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Cashier\Billable;
 use Laravel\Sanctum\HasApiTokens;
+use CloudinaryLabs\CloudinaryLaravel\MediaAlly;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, Billable, HasApiTokens;
+    use HasFactory, Notifiable, Billable, HasApiTokens, MediaAlly;
 
     /**
      * The attributes that are mass assignable.
@@ -26,6 +27,7 @@ class User extends Authenticatable
         'password',
         'country',
         'city',
+        'profile_img',
     ];
 
     /**
