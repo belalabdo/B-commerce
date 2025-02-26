@@ -1,17 +1,12 @@
 <?php
 
+use App\Http\Controllers\CategriesController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\EnsureTokenIsValid;
 use App\Http\Middleware\IsAdminRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Validation\ValidationException;
-use Laravel\Sanctum\NewAccessToken;
-use function Pest\Laravel\json;
-
 
 Route::controller(UserController::class)->group(function () {
     Route::post('/signup', 'signup');
@@ -26,6 +21,15 @@ Route::controller(ProductController::class)->group(function () {
     Route::delete('/products/{id}', 'delete')->middleware(IsAdminRequest::class);
     Route::get('/products/{id}', 'get');
     Route::get('/products', 'getAll');
+});
+
+Route::controller(CategriesController::class)->group(function () {
+    Route::get('/categories', 'getAll');
+    Route::get('/categories/{id}', 'get');
+    Route::get('/categories/{id}/products', 'getProducts');
+    Route::post('/categories', 'create')->middleware(IsAdminRequest::class);
+    Route::patch('/categories/{id}', 'update')->middleware(IsAdminRequest::class);
+    Route::delete('/categories/{id}', 'delete')->middleware(IsAdminRequest::class);
 });
 
 Route::get('/user/{id}', function ($id) {
