@@ -94,7 +94,6 @@ class ProductController extends Controller
             "discount" => $product->discount
         ]);
     }
-
     public function getAll(Request $request)
     {
         $products = Product::select()->withAvg("ratings", 'rate');
