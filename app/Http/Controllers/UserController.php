@@ -28,14 +28,14 @@ class UserController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
+            "email" => "required|email",
+            "password" => "required",
         ]);
 
-        $user = User::where('email', $request->email)->first();
+        $user = User::where("email", $request->email)->first();
         if (! $user || ! Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
+                "email" => ["The provided credentials are incorrect."],
             ]);
         }
         $token =  $user->createToken($user->name . "'s_token")->plainTextToken;
@@ -49,28 +49,28 @@ class UserController extends Controller
     {
         // Bad vaildation approach !
         $request->validate([
-            'name' => 'required|min:5|max:25',
-            'email' => 'required|email|unique:users',
-            'phone' => 'required|regex:/^01[0125][0-9]{8}$/i||unique:users',
-            'password' => 'required|min:5|max:255',
-            'profile_img' => 'image|extensions:jpg,png,jpeg'
+            "name" => "required|min:5|max:25",
+            "email" => "required|email|unique:users",
+            "phone" => "required|regex:/^01[0125][0-9]{8}$/i||unique:users",
+            "password" => "required|min:5|max:255",
+            "profile_img" => "image|extensions:jpg,png,jpeg"
         ]);
         $image_url = null;
-        if (!$request->file('profile_img') == null) {
+        if (!$request->file("profile_img") == null) {
             $image_url = resolve(CloudinaryEngine::class)
-                ->uploadFile($request->file('profile_img')->getRealPath())
+                ->uploadFile($request->file("profile_img")->getRealPath())
                 ->getSecurePath();
         }
 
         try {
             $user = User::create([
-                'name' => $request->name,
-                'phone' => $request->phone,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-                'country' => $request->country,
-                'city' => $request->city,
-                'profile_img' => $image_url,
+                "name" => $request->name,
+                "phone" => $request->phone,
+                "email" => $request->email,
+                "password" => Hash::make($request->password),
+                "country" => $request->country,
+                "city" => $request->city,
+                "profile_img" => $image_url,
             ]);
         } catch (QueryException $e) {
             return response([
@@ -81,25 +81,25 @@ class UserController extends Controller
         WishlistsController::create($user->id);
 
         return response([
-            'message' => "User Created Successfuly.",
-            'user' => $user
+            "message" => "User Created Successfuly.",
+            "user" => $user
         ], 201);
     }
     public function logout(Request $request)
     {
-        $token = $request->header('token');
+        $token = $request->header("token");
         if (!$token || !PersonalAccessToken::findToken($token)) {
             return response([
-                'message' => 'Token error !'
+                "message" => "Token error !"
             ], 400);
         }
         $token = PersonalAccessToken::findToken($token);
-        $user = User::where('id', $token->tokenable_id)->first();
+        $user = User::where("id", $token->tokenable_id)->first();
         $user->remember_token = null;
-        $user->tokens()->where('id', $token->id)->delete();
+        $user->tokens()->where("id", $token->id)->delete();
         $user->save();
         return response([
-            'message' => 'Logged out successfuly.'
+            "message" => "Logged out successfuly."
         ]);
     }
     public function update(Request $request)
@@ -110,13 +110,13 @@ class UserController extends Controller
 
         if (!$user) {
             return response([
-                'message' => 'User not found'
+                "message" => "User not found"
             ], 404);
         }
 
         $user->update($newUserData);
         return response([
-            'message' => 'User updated successfuly'
+            "message" => "User updated successfuly"
         ], 200);
     }
 }
