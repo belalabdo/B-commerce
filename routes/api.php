@@ -21,19 +21,13 @@ Route::controller(UserController::class)->group(function () {
 });
 
 Route::controller(ProductController::class)->group(function () {
-    Route::post('/product', 'createProduct');
-    Route::patch('/product/{id}', 'updateProduct');
+    Route::post('/products', 'create')->middleware(IsAdminRequest::class);
+    Route::patch('/products/{id}', 'update')->middleware(IsAdminRequest::class);
+    Route::delete('/products/{id}', 'delete')->middleware(IsAdminRequest::class);
+    Route::get('/products/{id}', 'get');
+    Route::get('/products', 'getAll');
 });
 
-
-
-
-
-
-
-
-
-// 
 Route::get('/user/{id}', function ($id) {
     $user = User::where("id", $id)->first();
     return ['tokens' => $user->tokens];
