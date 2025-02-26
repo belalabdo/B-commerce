@@ -55,9 +55,12 @@ class UserController extends Controller
             'password' => 'required|min:5|max:255',
             'profile_img' => 'image|extensions:jpg,png,jpeg'
         ]);
-        $image_url = resolve(CloudinaryEngine::class)
-            ->uploadFile($request->file('profile_img')->getRealPath())
-            ->getSecurePath();
+        $image_url = null;
+        if (!$request->file('profile_img') == null) {
+            $image_url = resolve(CloudinaryEngine::class)
+                ->uploadFile($request->file('profile_img')->getRealPath())
+                ->getSecurePath();
+        }
 
         try {
             $user = User::create([
