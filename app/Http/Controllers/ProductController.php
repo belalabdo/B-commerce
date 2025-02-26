@@ -50,13 +50,13 @@ class ProductController extends Controller
 
         if (!$product) {
             return response([
-                'message' => 'Product not found'
+                "message" => "Product not found"
             ], 404);
         }
 
         $product->update($newProductData);
         return response([
-            'message' => 'Product updated successfuly',
+            "message" => "Product updated successfuly",
             "product" => $product
         ], 200);
     }
@@ -66,17 +66,17 @@ class ProductController extends Controller
 
         if (!$product) {
             return response([
-                'message' => 'Product not found'
+                "message" => "Product not found"
             ], 404);
         }
         $product->delete();
         return response([
-            'message' => 'Product deleted successfuly'
+            "message" => "Product deleted successfuly"
         ], 200);
     }
     public function get($id)
     {
-        $product = Product::where("id", $id)->withAvg("ratings", 'rate')->first();
+        $product = Product::where("id", $id)->withAvg("ratings", "rate")->first();
         if ($product == null) {
             return response([
                 "message" => "Product not found"
@@ -96,30 +96,30 @@ class ProductController extends Controller
     }
     public function getAll(Request $request)
     {
-        $products = Product::select()->withAvg("ratings", 'rate');
-        if ($request->has('search')) {
+        $products = Product::select()->withAvg("ratings", "rate");
+        if ($request->has("search")) {
             $products->where(function ($q) use ($request) {
-                $q->where('name', 'like', '%' . $request->search . '%')
-                    ->orWhere('desc', 'like', '%' . $request->search . '%');
+                $q->where("name", "like", "%" . $request->search . "%")
+                    ->orWhere("desc", "like", "%" . $request->search . "%");
             });
         }
 
-        if ($request->has('min_discount')) {
-            $products->where('discount', '>', $request->min_discount);
+        if ($request->has("min_discount")) {
+            $products->where("discount", ">", $request->min_discount);
         }
 
-        if ($request->has('min_price') && $request->has('max_price')) {
-            $products->whereBetween('price', [$request->min_price, $request->max_price]);
+        if ($request->has("min_price") && $request->has("max_price")) {
+            $products->whereBetween("price", [$request->min_price, $request->max_price]);
         }
 
-        if ($request->has('in_stock')) {
-            $products->where('stock_quantity', '>', 0);
+        if ($request->has("in_stock")) {
+            $products->where("stock_quantity", ">", 0);
         }
 
-        if ($request->has('rating')) {
+        if ($request->has("rating")) {
             $rating = $request->rating;
-            $products->having('ratings_avg_rate', '>', $rating - 1)
-                ->having('ratings_avg_rate', '<', $rating + 1);
+            $products->having("ratings_avg_rate", ">", $rating - 1)
+                ->having("ratings_avg_rate", "<", $rating + 1);
         }
 
         $products = $products->get()->map(function (Product $product) {
