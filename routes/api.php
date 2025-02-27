@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\CategriesController;
+use App\Http\Controllers\BrandsController;
+use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\EnsureTokenIsValid;
@@ -23,13 +24,21 @@ Route::controller(ProductController::class)->group(function () {
     Route::get('/products', 'getAll');
 });
 
-Route::controller(CategriesController::class)->group(function () {
+Route::controller(CategoriesController::class)->group(function () {
     Route::get('/categories', 'getAll');
     Route::get('/categories/{id}', 'get');
     Route::get('/categories/{id}/products', 'getProducts');
     Route::post('/categories', 'create')->middleware(IsAdminRequest::class);
     Route::patch('/categories/{id}', 'update')->middleware(IsAdminRequest::class);
     Route::delete('/categories/{id}', 'delete')->middleware(IsAdminRequest::class);
+});
+Route::controller(BrandsController::class)->group(function () {
+    Route::get('/brands', 'getAll');
+    Route::get('/brands/{id}', 'get');
+    Route::get('/brands/{id}/products', 'getProducts');
+    Route::post('/brands', 'create')->middleware(IsAdminRequest::class);
+    Route::patch('/brands/{id}', 'update')->middleware(IsAdminRequest::class);
+    Route::delete('/brands/{id}', 'delete')->middleware(IsAdminRequest::class);
 });
 
 Route::get('/user/{id}', function ($id) {

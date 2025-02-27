@@ -94,9 +94,9 @@ class ProductController extends Controller
             "discount" => $product->discount
         ]);
     }
-    public function getAll(Request $request)
+    static public function getAll(Request $request, $products = null)
     {
-        $products = Product::select()->withAvg("ratings", "rate");
+        $products = !$products ? Product::select()->withAvg("ratings", "rate") : $products;
         if ($request->has("search")) {
             $products->where(function ($q) use ($request) {
                 $q->where("name", "like", "%" . $request->search . "%")

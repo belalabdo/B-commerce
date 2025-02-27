@@ -6,8 +6,9 @@ use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\ProductController;
 
-class CategriesController extends Controller
+class CategoriesController extends Controller
 {
     public function getAll()
     {
@@ -19,10 +20,10 @@ class CategriesController extends Controller
         $category = Category::where("id", $id)->first();
         return response($category);
     }
-    public function getProducts($id)
+    public function getProducts(Request $request, $id)
     {
-        $products = Product::where("category_id", $id)->get();
-        return response($products);
+        $products = Product::where("category_id", $id);
+        return ProductController::getAll($request, $products);
     }
     public function create(Request $request)
     {
