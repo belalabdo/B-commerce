@@ -9,4 +9,8 @@ class Cart extends Model
     protected $fillable = [
         "user_id"
     ];
+    public function cartItems()
+    {
+        return $this->hasMany(CartItem::class);
+    }
 }
