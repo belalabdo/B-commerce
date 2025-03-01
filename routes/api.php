@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BrandsController;
+use App\Http\Controllers\CartsController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
@@ -32,6 +33,7 @@ Route::controller(CategoriesController::class)->group(function () {
     Route::patch('/categories/{id}', 'update')->middleware(IsAdminRequest::class);
     Route::delete('/categories/{id}', 'delete')->middleware(IsAdminRequest::class);
 });
+
 Route::controller(BrandsController::class)->group(function () {
     Route::get('/brands', 'getAll');
     Route::get('/brands/{id}', 'get');
@@ -39,6 +41,12 @@ Route::controller(BrandsController::class)->group(function () {
     Route::post('/brands', 'create')->middleware(IsAdminRequest::class);
     Route::patch('/brands/{id}', 'update')->middleware(IsAdminRequest::class);
     Route::delete('/brands/{id}', 'delete')->middleware(IsAdminRequest::class);
+});
+Route::controller(CartsController::class)->group(function () {
+    Route::get('/cart', 'get')->middleware(EnsureTokenIsValid::class);
+    Route::post('/cart', 'add')->middleware(EnsureTokenIsValid::class);
+    Route::delete('/cart', 'delete')->middleware(EnsureTokenIsValid::class);
+    Route::patch('/cart', 'update')->middleware(EnsureTokenIsValid::class);
 });
 
 Route::get('/user/{id}', function ($id) {
