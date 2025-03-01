@@ -5,6 +5,7 @@ use App\Http\Controllers\CartsController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WishlistsController;
 use App\Http\Middleware\EnsureTokenIsValid;
 use App\Http\Middleware\IsAdminRequest;
 use App\Models\User;
@@ -42,11 +43,18 @@ Route::controller(BrandsController::class)->group(function () {
     Route::patch('/brands/{id}', 'update')->middleware(IsAdminRequest::class);
     Route::delete('/brands/{id}', 'delete')->middleware(IsAdminRequest::class);
 });
+
 Route::controller(CartsController::class)->group(function () {
     Route::get('/cart', 'get')->middleware(EnsureTokenIsValid::class);
     Route::post('/cart', 'add')->middleware(EnsureTokenIsValid::class);
     Route::delete('/cart', 'delete')->middleware(EnsureTokenIsValid::class);
     Route::patch('/cart', 'update')->middleware(EnsureTokenIsValid::class);
+});
+
+Route::controller(WishlistsController::class)->group(function () {
+    Route::get('/wishlist', 'get')->middleware(EnsureTokenIsValid::class);
+    Route::post('/wishlist', 'add')->middleware(EnsureTokenIsValid::class);
+    Route::delete('/wishlist', 'delete')->middleware(EnsureTokenIsValid::class);
 });
 
 Route::get('/user/{id}', function ($id) {
