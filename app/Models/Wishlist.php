@@ -9,4 +9,9 @@ class Wishlist extends Model
     protected $fillable = [
         "user_id"
     ];
+
+    public function wishlistItems()
+    {
+        return $this->hasMany(WishlistItem::class);
+    }
 }
