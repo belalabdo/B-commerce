@@ -38,7 +38,7 @@ class UserController extends Controller
                 "email" => ["The provided credentials are incorrect."],
             ]);
         }
-        $token =  $user->createToken($user->name . "'s_token")->plainTextToken;
+        $token = $user->createToken($user->name . "'s_token")->plainTextToken;
         $user->remember_token = $token;
         $user->save();
         return [

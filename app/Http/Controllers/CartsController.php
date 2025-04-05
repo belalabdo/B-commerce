@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\PersonalAccessToken;
 use App\Models\Product;
-use Illuminate\Http\Request;
 
 class CartsController extends Controller
 {

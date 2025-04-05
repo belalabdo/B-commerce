@@ -17,19 +17,10 @@ class IsAdminRequest
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $token = $request->header("token");
-        if (!$token || !PersonalAccessToken::findToken($token)) {
-            return response([
-                "message" => "Token not valid !"
-            ], 401);
-        }
-        $token = PersonalAccessToken::findToken($token);
+        $token = PersonalAccessToken::findToken($request->header("token"));
         $user = User::where('id', $token->tokenable_id)->first();
-        if ($user->role != 'admin') {
-            return response([
-                'message' => 'Admin only route !'
-            ], 403);
-        }
-        return $next($request);
+        return $user->role == 'admin' ?
+            $next($request) :
+            response(['message' => 'Admin only route !'], 403);
     }
 }

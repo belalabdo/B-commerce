@@ -17,11 +17,9 @@ class EnsureTokenIsValid
     public function handle(Request $request, Closure $next): Response
     {
         $token = $request->header("token");
-        if (!$token || !PersonalAccessToken::findToken($token)) {
-            return response([
-                "message" => "Token error !"
-            ], 400);
-        }
-        return $next($request);
+
+        return $token && PersonalAccessToken::findToken($token) ?
+            $next($request) :
+            response(["message" => "Token error !"], 400);
     }
 }
