@@ -18,9 +18,11 @@ class UserController extends Controller
     {
         $data = Validator::make($request->all(), [
             "name" => "$required|min:5|max:25",
-            "email" => "$required|email|unique:users",
-            "phone" => "$required|regex:/^01[0125][0-9]{8}$/i||unique:users",
+            "email" => "$required|email|max:255|unique:users",
+            "phone" => "$required|regex:/^01[0125][0-9]{8}$/i|unique:users",
             "password" => "$required|min:5|max:255",
+            "country" => "$required|max:255",
+            "city" => "$required|max:255",
             "profile_img" => "image|extensions:jpg,png,jpeg"
         ])->validate();
         return $data;

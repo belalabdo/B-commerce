@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ProductResource;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Rating;
@@ -13,7 +14,7 @@ use function Pest\Laravel\get;
 
 class ProductController extends Controller
 {
-    private function vaildateProductInputs(Request $request, $required = "required")
+    private function vaildate(Request $request, $required = "required")
     {
         $data = Validator::make($request->all(), [
             "name" => "$required|string",
@@ -28,7 +29,7 @@ class ProductController extends Controller
     }
     public function create(Request $request)
     {
-        $this->vaildateProductInputs($request);
+        $this->vaildate($request);
         $product = Product::create([
             "name" => $request->name,
             "price" => $request->price,
@@ -45,7 +46,7 @@ class ProductController extends Controller
     }
     public function update(Request $request, $id)
     {
-        $newProductData = $this->vaildateProductInputs($request, false);
+        $newProductData = $this->vaildate($request, false);
         $product = Product::find($id);
 
         if (!$product) {
@@ -82,17 +83,7 @@ class ProductController extends Controller
                 "message" => "Product not found"
             ], 404);
         }
-        return response([
-            "id" => $product->id,
-            "name" => $product->name,
-            "desc" => $product->desc,
-            "price" => $product->price,
-            "category" => $product->category,
-            "brand" => $product->brand,
-            "stock_quantity" => $product->stock_quantity,
-            "rate" => $product->ratings_avg_rate,
-            "discount" => $product->discount
-        ]);
+        return new ProductResource($product);
     }
     static public function getAll(Request $request, $products = null)
     {

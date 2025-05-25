@@ -8,6 +8,9 @@ use Laravel\Sanctum\Sanctum;
 use Laravel\Cashier\Cashier;
 use App\Models\Subscription;
 use App\Models\SubscriptionItem;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -28,5 +31,8 @@ class AppServiceProvider extends ServiceProvider
         Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
         Cashier::useSubscriptionModel(Subscription::class);
         Cashier::useSubscriptionItemModel(SubscriptionItem::class);
+        // RateLimiter::for('api', function (Request $request) {
+        //     return Limit::perMinute(1)->by($request->user()?->id ?: $request->ip());
+        // });
     }
 }
